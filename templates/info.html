@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<main class="container">
+  <form method="POST" class="my-4 p-4 border rounded">
+    <div class="mb-3">
+      <label for="city_name" class="form-label">Enter City Name:</label>
+      <input
+        type="text"
+        name="city_name"
+        id="city_name"
+        required
+        class="form-control"
+        placeholder="Enter city name"
+        value="{{ city_name }}"
+      />
+    </div>
+    <div class="container">
+          <style>
+              body {
+                background-image: url('https://media.istockphoto.com/id/1084416182/vector/sky-and-clouds-background-sky-and-cloud-with-blue-color-cartoon-cloudy-background-vector.jpg?s=612x612&w=0&k=20&c=2VDrTkMPDrOa6_CVFVqhnmLrspT91hqWbkfuEkqJnjM=');
+                  background-size: cover;
+                  background-position: center;
+                  height: 100vh; 
+              }
+              .container {
+                  padding-top: 100px; 
+                  color: rgba(23, 3, 3, 0.951); 
+              }
+          </style>
+      </div>
+
+    <div class="">
+      <label for="data_type" class="form-label">Select Data Type:</label>
+      
+      <select name="data_type" id="data_type" class="form-select mb-4 " >
+        <option value="current_weather">Current Weather</option>
+        <option value="7_day_forecast">7-Day Forecast</option>
+        <option value="hail_chance">Hail Chance</option>
+      </select>
+    </div>
+
+    <input type="submit" class="btn btn-primary mt-4" value="Get Weather" />
+  </form>
+
+  {% if weather_data %}
+  <section>
+    <h2>Current Weather Data</h2>
+    <p>Description: {{ weather_data.description }}</p>
+    <p>Temperature: {{ weather_data.temperature }}°C</p>
+  </section>
+  {% endif %} 
+  
+  {% if seven_day_forecast %}
+  <section>
+    <h2>7-Day Forecast</h2>
+    {% for date, daily_forecast in seven_day_forecast.items() %}
+
+    <div>Date: {{ date.strftime('%Y-%m-%d') }}</div>
+     
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Description</th>
+            <th>Temperature (°C)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for entry in daily_forecast %}
+          <tr>
+            <td>{{ entry.time }}</td>
+            <td>{{ entry.description }}</td>
+            <td>{{ entry.temperature }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endfor %}
+  </section>
+  {% endif %} {% if hail_chance %}
+  <section>
+    <h2>Hail Chance</h2>
+    <p>Hail Chance 7 Hours from Now: {{ hail_chance }}%</p>
+  </section>
+  {% endif %} {% if error_message %}
+  <section>
+    <h2>Error</h2>
+    <p>{{ error_message }}</p>
+  </section>
+  {% endif %}
+</main>
+
+{% endblock %}
